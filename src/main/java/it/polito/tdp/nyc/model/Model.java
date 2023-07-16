@@ -29,7 +29,7 @@ public class Model {
 		return this.boroughs;
 	}
 	
-	public void creaGrafo(String borough) {
+	public Graph creaGrafo(String borough) {
 		NYCDao dao = new NYCDao();
 		this.NTAs = dao.getNTAbyBorough(borough);
 		
@@ -50,29 +50,43 @@ public class Model {
 			}
 		}
 		
-		System.out.println("numero veritici: "+this.grafo.vertexSet().size());
-		System.out.println("numero archi: "+this.grafo.edgeSet().size());
+		return this.grafo;
 	}
 	
-	public List<Arco> analisiArchi(){
-		double media =0.0;
-		for(DefaultWeightedEdge ed:this.grafo.edgeSet()) {
-			media = media + this.grafo.getEdgeWeight(ed);
+	public List<Arco> analisiArchi() {
+		double media = 0.0 ;
+		for(DefaultWeightedEdge e: this.grafo.edgeSet()) {
+			media = media + this.grafo.getEdgeWeight(e) ;
 		}
-		media = media/ this.grafo.edgeSet().size();
+		media = media / this.grafo.edgeSet().size() ;
 		
 		List<Arco> result = new ArrayList<>();
-		
-		for(DefaultWeightedEdge e:this.grafo.edgeSet()) {
-			if(this.grafo.getEdgeWeight(e)>media) {
-				result.add(new Arco(this.grafo.getEdgeSource(e).getNTACode(), this.grafo.getEdgeTarget(e).getNTACode(), (int) this.grafo.getEdgeWeight(e)));
-				
+		for(DefaultWeightedEdge ee: this.grafo.edgeSet()) {
+			if(this.grafo.getEdgeWeight(ee)>media) {
+				result.add(new Arco(
+						this.grafo.getEdgeSource(ee).getNTACode(),
+						this.grafo.getEdgeTarget(ee).getNTACode(),
+						(int)this.grafo.getEdgeWeight(ee)
+						)) ;
 			}
 		}
 		
 		Collections.sort(result);
+		return result ;
 		
-		return result;
+	}
+	
+	public double media() {
+		
+		double media = 0.0 ;
+		
+		for(DefaultWeightedEdge e: this.grafo.edgeSet()) {
+			media = media + this.grafo.getEdgeWeight(e) ;
+		}
+		media = media / this.grafo.edgeSet().size() ;
+		
+		return media ;
+		
 	}
 	
 }

@@ -4,8 +4,12 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultWeightedEdge;
+
 import it.polito.tdp.nyc.model.Arco;
 import it.polito.tdp.nyc.model.Model;
+import it.polito.tdp.nyc.model.NTA;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -18,6 +22,7 @@ import javafx.scene.control.TextField;
 public class FXMLController {
 
 	Model model;
+	private Graph<NTA, DefaultWeightedEdge> graph;
 	
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -62,9 +67,9 @@ public class FXMLController {
     void doAnalisiArchi(ActionEvent event) {
     	
     	List<Arco> archi = model.analisiArchi();
-    	for(Arco a:archi) {
-    		txtResult.appendText(a+"\n");
-    	}
+    	txtResult.appendText("MEDIA: "+this.model.media()+"\n");
+    	txtResult.appendText("ARCHI CON PESO MAGGIORE PESO MEDIO: "+archi.size()+"\n");
+    	
 
     }
 
@@ -74,7 +79,8 @@ public class FXMLController {
     	if(borough==null) {
     		txtResult.appendText("seleziona una voce");
     	}else {
-    		model.creaGrafo(borough);
+    		this.graph = model.creaGrafo(borough);
+    		txtResult.appendText("#VERTICI: "+this.graph.vertexSet().size()+"\n"+ "#ARCHI: "+this.graph.edgeSet().size()+"\n");
     	}
     }
 
